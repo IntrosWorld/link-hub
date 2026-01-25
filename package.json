@@ -5,12 +5,21 @@
   "license": "ISC",
   "author": "",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
+    "dev": "concurrently \"node server.js\" \"npm run dev --prefix client\"",
+    "check-env": "node check-env.js",
+    "test-db": "node test-db.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "sqlite3": "^5.1.7"
+    "firebase-admin": "^13.6.0",
+    "pg": "^8.17.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }

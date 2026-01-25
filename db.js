@@ -1,28 +1,73 @@
-const sqlite3 = require("sqlite3").verbose();
-const path = require("path");
+require('dotenv').config();
+const { Pool } = require('pg');
 
-const db = new sqlite3.Database(
-  path.join(__dirname, "links.db"),
-  err => {
-    if (err) {
-      console.error("DB connection error:", err.message);
-    } else {
-      console.log("Connected to SQLite database");
-    }
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
   }
-);
+});
 
-// Create table if it does not exist
-db.run(`
+pool.on('connect', () => {
+  console.log('Connected to Neon (PostgreSQL) database');
+});
+
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle client', err);
+  process.exit(-1);
+});
+
+const schema = `
+  CREATE TABLE IF NOT EXISTS hubs (
+    id SERIAL PRIMARY KEY,
+    handle TEXT UNIQUE NOT NULL,
+    uid TEXT, -- Firebase User ID
+    title TEXT,
+    description TEXT,
+    theme_config TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+
   CREATE TABLE IF NOT EXISTS links (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
+    hub_id INTEGER REFERENCES hubs(id) ON DELETE CASCADE,
     title TEXT NOT NULL,
     url TEXT NOT NULL,
     clicks INTEGER DEFAULT 0,
     start_hour INTEGER,
     end_hour INTEGER,
-    time_priority INTEGER DEFAULT 0
-  )
-`);
+    time_priority INTEGER DEFAULT 0,
+    device_target TEXT DEFAULT 'all',
+    location_target TEXT
+  );
 
-module.exports = db;
+  CREATE TABLE IF NOT EXISTS analytics (
+    id SERIAL PRIMARY KEY,
+    hub_id INTEGER REFERENCES hubs(id) ON DELETE SET NULL,
+    link_id INTEGER,
+    event_type TEXT CHECK(event_type IN ('view', 'click')),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_agent TEXT,
+    ip_hash TEXT
+  );
+`;
+
+const initDb = async () => {
+  try {
+    await pool.query(schema);
+    console.log('Database schema initialized');
+  } catch (err) {
+    console.error('Error initializing schema:', err);
+  }
+};
+
+// Initialize schema if DATABASE_URL is present
+if (process.env.DATABASE_URL) {
+  initDb();
+} else {
+  console.warn("WARNING: DATABASE_URL not found in .env. Database connection will fail.");
+}
+
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+};
