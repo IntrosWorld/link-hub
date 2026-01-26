@@ -1,5 +1,5 @@
-require('dotenv').config();
-const { Pool } = require('pg');
+import 'dotenv/config';
+import { Pool, QueryResult, QueryResultRow } from 'pg';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -12,7 +12,7 @@ pool.on('connect', () => {
   console.log('Connected to Neon (PostgreSQL) database');
 });
 
-pool.on('error', (err) => {
+pool.on('error', (err: Error) => {
   console.error('Unexpected error on idle client', err);
   process.exit(-1);
 });
@@ -21,7 +21,7 @@ const schema = `
   CREATE TABLE IF NOT EXISTS hubs (
     id SERIAL PRIMARY KEY,
     handle TEXT UNIQUE NOT NULL,
-    uid TEXT, -- Firebase User ID
+    uid TEXT,
     title TEXT,
     description TEXT,
     theme_config TEXT,
@@ -52,7 +52,7 @@ const schema = `
   );
 `;
 
-const initDb = async () => {
+const initDb = async (): Promise<void> => {
   try {
     await pool.query(schema);
     console.log('Database schema initialized');
@@ -61,13 +61,15 @@ const initDb = async () => {
   }
 };
 
-// Initialize schema if DATABASE_URL is present
 if (process.env.DATABASE_URL) {
   initDb();
 } else {
   console.warn("WARNING: DATABASE_URL not found in .env. Database connection will fail.");
 }
 
-module.exports = {
-  query: (text, params) => pool.query(text, params),
+export const query = <T extends QueryResultRow = any>(
+  text: string,
+  params?: unknown[]
+): Promise<QueryResult<T>> => {
+  return pool.query<T>(text, params);
 };

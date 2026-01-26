@@ -14,12 +14,12 @@ async function testProtectedEndpoint(method, endpoint, body = null) {
         const res = await fetch(`${BASE_URL}${endpoint}`, options);
 
         if (res.status === 401) {
-            console.log('✅ Success: Recieved 401 Unauthorized as expected.');
+            console.log('Success: Recieved 401 Unauthorized as expected.');
         } else {
-            console.error(`❌ FAILED: Expected 401, got ${res.status}`);
+            console.error(`FAILED: Expected 401, got ${res.status}`);
         }
     } catch (err) {
-        console.error('❌ Error hitting endpoint:', err);
+        console.error('Error hitting endpoint:', err);
     }
 }
 
@@ -33,9 +33,9 @@ async function runTests() {
     console.log('\n--- Testing Public Endpoint ---');
     const res = await fetch(`${BASE_URL}/api/hubs/some-handle`);
     if (res.status === 404 || res.status === 200) {
-        console.log(`✅ Public endpoint accessible (Status: ${res.status})`);
+        console.log(`Public endpoint accessible (Status: ${res.status})`);
     } else {
-        console.log(`❓ Public endpoint returned ${res.status}`);
+        console.log(`Public endpoint returned ${res.status}`);
     }
 }
 

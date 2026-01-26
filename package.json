@@ -5,12 +5,14 @@
   "license": "ISC",
   "author": "",
   "type": "commonjs",
-  "main": "server.js",
+  "main": "server.ts",
   "scripts": {
-    "start": "node server.js",
-    "dev": "concurrently \"node server.js\" \"npm run dev --prefix client\"",
-    "check-env": "node check-env.js",
-    "test-db": "node test-db.js",
+    "start": "node dist/server.js",
+    "dev": "concurrently \"tsx watch server.ts\" \"npm run dev --prefix client\"",
+    "build": "tsc",
+    "check-env": "tsx check-env.ts",
+    "test-db": "tsx test-db.ts",
+    "type-check": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -20,6 +22,11 @@
     "pg": "^8.17.2"
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.10",
+    "@types/pg": "^8.16.0",
+    "concurrently": "^9.2.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }

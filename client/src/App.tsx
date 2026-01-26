@@ -5,8 +5,13 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
+import { ReactNode } from 'react';
 
-function PrivateRoute({ children }) {
+interface PrivateRouteProps {
+  children: ReactNode;
+}
+
+function PrivateRoute({ children }: PrivateRouteProps): JSX.Element {
   const { currentUser } = useAuth();
   const location = useLocation();
 
@@ -14,10 +19,10 @@ function PrivateRoute({ children }) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return children;
+  return <>{children}</>;
 }
 
-function App() {
+function App(): JSX.Element {
   return (
     <ErrorBoundary>
       <BrowserRouter>
