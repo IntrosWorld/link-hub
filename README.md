@@ -40,7 +40,7 @@ A modern link hub platform with Firebase authentication, smart link ranking, and
 1. Clone the repository:
 ```bash
 git clone https://github.com/IntrosWorld/link-hub.git
-cd random
+cd link-hub
 ```
 
 2. Install dependencies:
