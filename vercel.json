@@ -1,4 +1,5 @@
 {
+  "framework": null,
   "buildCommand": "cd client && npm install && npm run build && cd .. && cp -r client/dist public",
   "installCommand": "npm install",
   "rewrites": [
