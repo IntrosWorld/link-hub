@@ -220,7 +220,7 @@ Links are ranked by: `score = clicks + timePriority`
 ### Time-Based Visibility
 
 Set `startHour` and `endHour` (0-23) to show links only during specific hours:
-- Example: startHour=9, endHour=17 (9 AM - 5 PM only)
+- Example: `startHour=9, endHour=17` (9 AM - 5 PM only)
 
 ### Device Targeting
 
