@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "concurrently \"tsx watch server.ts\" \"npm run dev --prefix client\"",
-    "build": "npm install --prefix client && npm run build --prefix client && npx tsc",
+    "build": "npx tsc",
+    "build:all": "npm install --prefix client && npm run build --prefix client && npx tsc",
     "check-env": "tsx check-env.ts",
     "test-db": "tsx test-db.ts",
     "migrate-fresh": "tsx migrate-fresh.ts",
