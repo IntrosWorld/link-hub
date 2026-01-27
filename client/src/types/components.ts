@@ -12,10 +12,12 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
 export interface LinkCardProps {
   link: Link;
   onDelete: (id: number) => void | Promise<void>;
+  onUpdateAccess?: (id: number, visibility: 'public' | 'restricted', allowedUsernamesInput: string[]) => void | Promise<void>;
 }
 
 export interface PublicLinkProps {
   link: Link;
+  onOpen?: (id: number) => void | Promise<void>;
 }
 
 export interface ErrorBoundaryProps {

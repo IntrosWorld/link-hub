@@ -18,13 +18,24 @@ pool.on('error', (err: Error) => {
 });
 
 const schema = `
+  CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    uid TEXT UNIQUE NOT NULL,
+    username TEXT UNIQUE NOT NULL,
+    display_name TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+
   CREATE TABLE IF NOT EXISTS hubs (
     id SERIAL PRIMARY KEY,
     handle TEXT UNIQUE NOT NULL,
+    username TEXT,
     uid TEXT,
     title TEXT,
     description TEXT,
-    theme_config TEXT,
+    theme_config TEXT DEFAULT '{}',
+    visibility TEXT DEFAULT 'public',
+    allowed_usernames TEXT[],
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
 
@@ -38,7 +49,10 @@ const schema = `
     end_hour INTEGER,
     time_priority INTEGER DEFAULT 0,
     device_target TEXT DEFAULT 'all',
-    location_target TEXT
+    location_target TEXT,
+    visibility TEXT DEFAULT 'public',
+    allowed_usernames TEXT[],
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
 
   CREATE TABLE IF NOT EXISTS analytics (
@@ -50,6 +64,22 @@ const schema = `
     user_agent TEXT,
     ip_hash TEXT
   );
+
+  ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS display_name TEXT;
+
+  ALTER TABLE hubs
+    ADD COLUMN IF NOT EXISTS username TEXT,
+    ADD COLUMN IF NOT EXISTS uid TEXT,
+    ADD COLUMN IF NOT EXISTS theme_config TEXT DEFAULT '{}',
+    ADD COLUMN IF NOT EXISTS visibility TEXT DEFAULT 'public',
+    ADD COLUMN IF NOT EXISTS allowed_usernames TEXT[];
+
+  ALTER TABLE links
+    ADD COLUMN IF NOT EXISTS device_target TEXT DEFAULT 'all',
+    ADD COLUMN IF NOT EXISTS visibility TEXT DEFAULT 'public',
+    ADD COLUMN IF NOT EXISTS allowed_usernames TEXT[],
+    ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 `;
 
 const initDb = async (): Promise<void> => {

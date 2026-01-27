@@ -12,6 +12,8 @@
     "build": "tsc",
     "check-env": "tsx check-env.ts",
     "test-db": "tsx test-db.ts",
+    "migrate-fresh": "tsx migrate-fresh.ts",
+    "migrate-advanced": "tsx migrate-advanced.ts",
     "type-check": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -39,6 +39,7 @@ function App(): JSX.Element {
               }
             />
             <Route path="/h/:handle" element={<PublicHub />} />
+            <Route path="/:username/:handle" element={<PublicHub />} />
             <Route path="/" element={<Navigate to="/admin" replace />} />
           </Routes>
         </AuthProvider>

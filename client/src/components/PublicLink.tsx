@@ -1,10 +1,18 @@
+import type { MouseEvent } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { PublicLinkProps } from '../types/components';
 
-export function PublicLink({ link }: PublicLinkProps): JSX.Element {
+export function PublicLink({ link, onOpen }: PublicLinkProps): JSX.Element {
+  const handleClick = async (event: MouseEvent<HTMLAnchorElement>) => {
+    if (!onOpen) return;
+    event.preventDefault();
+    await onOpen(link.id);
+  };
+
   return (
     <a
       href={`/go/${link.id}`}
+      onClick={onOpen ? handleClick : undefined}
       className="block w-full bg-zinc-900 hover:bg-brand-green hover:text-black border border-zinc-800 hover:border-brand-green p-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] group"
     >
       <div className="flex justify-between items-center">
