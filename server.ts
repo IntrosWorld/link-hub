@@ -978,6 +978,11 @@ app.get(/.*/, (_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "client/dist/index.html"));
 });
 
-app.listen(3000, () => {
-  console.log("Create Hub API Server running on port 3000");
-});
+// Only start server if not in Vercel serverless environment
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(3000, () => {
+    console.log("Create Hub API Server running on port 3000");
+  });
+}
+
+export default app;
