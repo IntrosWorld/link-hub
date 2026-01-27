@@ -10,7 +10,11 @@ import { DatabaseHub, DatabaseLink, DatabaseUser, AnalyticsSummary, DatabaseLink
 const app = express();
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "client/dist")));
+
+// Only serve static files in development (Vercel handles static files in production)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.use(express.static(path.join(__dirname, "client/dist")));
+}
 
 app.use(((req: Request, _res: Response, next: NextFunction) => {
   (req as ContextRequest).ctx = {
@@ -974,12 +978,12 @@ app.get("/api/analytics/:hubId", verifyToken, (async (req: Request, res: Respons
   }
 }) as RequestHandler);
 
-app.get(/.*/, (_req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, "client/dist/index.html"));
-});
-
-// Only start server if not in Vercel serverless environment
+// In development, serve SPA catch-all (Vercel handles this in production via rewrites)
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.get(/.*/, (_req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, "client/dist/index.html"));
+  });
+
   app.listen(3000, () => {
     console.log("Create Hub API Server running on port 3000");
   });

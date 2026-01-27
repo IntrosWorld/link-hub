@@ -1,8 +1,18 @@
 {
+  "buildCommand": "npm install --prefix client && npm run build --prefix client && tsc",
+  "outputDirectory": "client/dist",
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
       "destination": "/api"
+    },
+    {
+      "source": "/go/:id",
+      "destination": "/api"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
