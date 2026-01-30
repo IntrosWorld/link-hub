@@ -39,8 +39,8 @@ A modern link hub platform with Firebase authentication, smart link ranking, and
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
-cd random
+git clone https://github.com/IntrosWorld/link-hub.git
+cd link-hub
 ```
 
 2. Install dependencies:
@@ -220,7 +220,7 @@ Links are ranked by: `score = clicks + timePriority`
 ### Time-Based Visibility
 
 Set `startHour` and `endHour` (0-23) to show links only during specific hours:
-- Example: startHour=9, endHour=17 (9 AM - 5 PM only)
+- Example: `startHour=9, endHour=17` (9 AM - 5 PM only)
 
 ### Device Targeting
 
