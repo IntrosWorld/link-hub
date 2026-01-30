@@ -14,6 +14,11 @@ export default function Signup(): JSX.Element {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
+    if (passwordRef.current!.value.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+
     if (passwordRef.current!.value !== passwordConfirmRef.current!.value) {
       setError("Passwords do not match");
       return;
